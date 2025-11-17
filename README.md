@@ -1,49 +1,48 @@
-"My 8-week Learning goals as a Fullstack Developer" 
+# My 8-Week Learning Goals as a Fullstack Developer
 
-Master the Fundamentals:
-Understand how the web works — client, server, APIs, and databases.
-Learn the basics of HTML, CSS, and JavaScript deeply.
-Know how to create responsive and accessible user interfaces.
+## 1. Master the Fundamentals  
+- Understand how the web works (client, server, APIs, databases)  
+- Build a strong foundation in **HTML**, **CSS**, and **JavaScript**  
+- Create responsive, accessible, and user-friendly interfaces  
 
-Frontend Proficiency:
-Be skilled in a modern frontend framework like React.
-Manage state (React Hooks, Redux, Context API).
-Handle routing (React Router).
-Know API integration (fetch/axios).
-Ensure UI performance and accessibility
+## 2. Frontend Development Proficiency  
+- Become comfortable with **React** fundamentals  
+- Manage state using _Hooks_, **Context API**, or **Redux**  
+- Implement client-side routing with **React Router**  
+- Integrate APIs using `fetch` / `axios`  
+- Improve UI performance and follow accessibility best practices  
 
-Backend Development:
-Understand Node.js and frameworks like Express.js.
-Learn how to design RESTful APIs and handle requests/responses.
-Know about authentication, authorization, and session management.
-Practice error handling and proper logging.
+## 3. Backend Development  
+- Learn **Node.js** and **Express.js**  
+- Build and structure **RESTful APIs**  
+- Understand authentication, authorization, sessions, and JWT  
+- Apply error handling, validation, and logging  
 
-Database Management:
-Learn both SQL (MySQL/PostgreSQL) and NoSQL (MongoDB).
-Understand data modeling, indexing, and relationships.
-Write optimized queries and handle migrations.
+## 4. Database Skills  
+- Learn both **SQL** (MySQL/PostgreSQL) and **NoSQL** (MongoDB)  
+- Understand schemas, relationships, indexing, and data modeling  
+- Write efficient queries and handle migrations  
 
-Fullstack Integration:
-Connect React frontend with Express backend.
+## 5. Fullstack Integration  
+- Connect a React frontend with an Express/Node backend  
+- Build end-to-end features (UI → API → DB → UI response)  
 
-Version Control & Collaboration:
-Be comfortable with Git & GitHub.
-Understand branching, merging, rebasing, and pull requests.
-Follow conventional commit messages and clean Git history.
+## 6. Version Control & Collaboration  
+- Use **Git & GitHub** confidently  
+- Practice branching strategies, merging, rebasing, and PR reviews  
+- Follow conventional commit messages and maintain clean history  
 
-Deployment:
-Know how to deploy full-stack apps to platforms like Vercel, Netlify, Render, or AWS.
+## 7. Deployment  
+- Deploy full-stack apps using **Vercel**, **Netlify**, **Render**, or **AWS**  
+- Understand environment variables, build pipelines, and hosting workflow  
 
-Code Quality & Testing:
-Write clean, maintainable code.
-Use linters (ESLint, Prettier).
-Write unit and integration tests using Jest or Mocha.
-Review and refactor code regularly.
+## 8. Code Quality & Testing  
+- Write clean, readable, maintainable code  
+- Use linters like **ESLint** / **Prettier**  
+- Write **unit** and **integration tests** (Jest / Mocha)  
+- Continuously refactor and review code  
 
-Soft Skills & Team Collaboration:
-Communicate clearly during code reviews and stand-ups.
-Be proactive about problem-solving and feedback.
-Keep documentation clear and concise.
-
-
-
+## 9. Soft Skills & Team Collaboration  
+- Communicate clearly during stand-ups, reviews, and discussions  
+- Take initiative in solving problems and ask for feedback  
+- Maintain good documentation and collaboration practices  
