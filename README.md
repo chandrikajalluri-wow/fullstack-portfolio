@@ -1,4 +1,4 @@
-"My 8-week Learning goals as a Fullstack Developer" 
+"My 14 Learning goals as a Fullstack Developer" 
 
 Master the Fundamentals:
 Understand how the web works — client, server, APIs, and databases.
