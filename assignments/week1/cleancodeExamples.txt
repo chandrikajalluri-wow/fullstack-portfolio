@@ -1,0 +1,35 @@
+## Clean Code Principles
+
+1. Meaningful Names:
+
+const d = 5 //Bad - we can't able to get the purpose of d.
+
+const daysInWeek = 7 //Good - Here the variable name explains itself.
+
+2. Single Responsibility Principle
+
+//Bad
+
+function handleUser(){
+    validateUser();
+    saveUser();
+    sendEmail();
+}
+
+//Good - Each function should do one thing only
+
+function validateUser() {...}
+function saveUser() {...}
+function sendEmail() {...}
+
+3. Clean Formatting
+
+//Bad
+
+function add(a,b) {return a+b;}
+
+//Good
+
+function add(a, b){
+    return a + b;
+}

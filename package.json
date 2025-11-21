@@ -1,0 +1,32 @@
+{
+  "name": "fullstack-portfolio",
+  "version": "1.0.0",
+  "description": "- Understand how the web works (client, server, APIs, databases)  \r - Build a strong foundation in **HTML**, **CSS**, and **JavaScript**  \r - Create responsive, accessible, and user-friendly interfaces",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chandrikajalluri-wow/fullstack-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/chandrikajalluri-wow/fullstack-portfolio/issues"
+  },
+  "homepage": "https://github.com/chandrikajalluri-wow/fullstack-portfolio#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
+    "prettier": "^3.6.2"
+  }
+}
