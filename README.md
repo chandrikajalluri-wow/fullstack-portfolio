@@ -9,7 +9,7 @@
 - Become comfortable with **React** fundamentals  
 - Manage state using _Hooks_, **Context API**, or **Redux**  
 - Implement client-side routing with **React Router**  
-- Integrate APIs using `fetch` / `axios`  
+- Integrate APIs using `fetch` / `axios`
 - Improve UI performance and follow accessibility best practices  
 
 ## 3. Backend Development  
