@@ -1,0 +1,59 @@
+*{
+    margin: 0px;
+    box-sizing: border-box
+}
+.bg-container{
+    background-color: rgba(217, 249, 245, 0.767);
+    min-height: 100vh;
+    min-width: 100vw;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center
+}
+.card-container{
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    width: 300px;
+}
+.header{
+    text-align: center;
+    margin-bottom:8px;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: "Roboto";
+    color: slateblue;
+}
+#cityInput{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 250px;
+    margin-bottom: 10px;
+}
+#searchBtn{
+    background-color: rgb(97, 79, 217);
+    padding: 10px;
+    border: 0px;
+    color: white;
+    font-family: Roboto;
+    border-radius: 6px;
+}
+.result-box{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+p{
+    font-family: Roboto;
+    font-size: 15px;
+    padding: 2px;
+}
+h2{
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 600;
+}
