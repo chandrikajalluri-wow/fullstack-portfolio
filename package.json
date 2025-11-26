@@ -28,5 +28,8 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
     "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }
