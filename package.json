@@ -11,6 +11,14 @@
     "format": "prettier --write",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{js,ts,jsx}": [
+      "eslint"
+    ],
+    "*": [
+      "prettier --write --ignore-unknown"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chandrikajalluri-wow/fullstack-portfolio.git"
