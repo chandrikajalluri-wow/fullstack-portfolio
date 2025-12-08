@@ -1,11 +1,49 @@
+// src/App.jsx
 import React from 'react';
-import Todo from './components/Todo';
-import './App.css';
+import { Routes, Route, NavLink } from 'react-router-dom';
+import Home from './pages/Home';
+import Todos from './pages/Todos';
+import About from './pages/About';
 
 const App = () => {
   return (
-    <div className="bg-stone-900 grid py-4 min-h-screen">
-      <Todo />
+    <div className="min-h-screen bg-gray-100 grid place-items-center">
+      <nav className="fixed top-0 left-0 right-0 bg-orange-600 text-white px-6 py-3 flex gap-6 shadow-md">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `text-sm font-medium hover:underline ${isActive ? 'underline' : ''}`
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/todos"
+          className={({ isActive }) =>
+            `text-sm font-medium hover:underline ${isActive ? 'underline' : ''}`
+          }
+        >
+          Todos
+        </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            `text-sm font-medium hover:underline ${isActive ? 'underline' : ''}`
+          }
+        >
+          About
+        </NavLink>
+      </nav>
+
+      <main className="w-full pt-20 px-4">
+        <div className="mx-auto w-11/12 max-w-2xl">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/todos" element={<Todos />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+      </main>
     </div>
   );
 };
