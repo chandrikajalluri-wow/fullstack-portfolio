@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import todo_icon from '../assets/todo_icon.png';
 import TodoItems from './TodoItems';
+import { useLocalStorage } from '../customhooks/useLocalStorage';
+import { useToggle } from '../customhooks/useToggle';
 
 const Todo = () => {
-  const [todoList, setTodoList] = useState(() => {
-    const saved = localStorage.getItem('todos');
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  const [todoList, setTodoList] = useLocalStorage('todos', []);
+  const [showCompleted, toggleShowCompleted] = useToggle(true);
   const inputRef = useRef();
 
   const add = () => {
@@ -26,7 +25,7 @@ const Todo = () => {
     setTodoList((prev) => prev.filter((todo) => todo.id !== id));
   };
 
-  const toggle = (id) => {
+  const toggleTodo = (id) => {
     setTodoList((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, isComplete: !todo.isComplete } : todo
@@ -34,9 +33,9 @@ const Todo = () => {
     );
   };
 
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todoList));
-  }, [todoList]);
+  const filteredTodos = showCompleted
+    ? todoList
+    : todoList.filter((todo) => !todo.isComplete);
 
   return (
     <div className="bg-white place-self-center w-11/12 max-w-md flex flex-col p-7 min-h-[550px] rounded-xl">
@@ -61,16 +60,24 @@ const Todo = () => {
         </button>
       </div>
 
+      {/* Toggle show/hide completed */}
+      <button
+        onClick={toggleShowCompleted}
+        className="self-end mb-4 px-4 py-2 rounded-full bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+      >
+        {showCompleted ? 'Hide Completed' : 'Show Completed'}
+      </button>
+
       <div>
-        {todoList.length === 0 ? (
+        {filteredTodos.length === 0 ? (
           <p className="text-center text-slate-500 mt-10">
             No tasks yet. Add one above!
           </p>
         ) : (
-          todoList.map((item) => (
+          filteredTodos.map((item) => (
             <TodoItems
               key={item.id}
-              toggle={toggle}
+              toggle={toggleTodo}
               text={item.text}
               id={item.id}
               isComplete={item.isComplete}
