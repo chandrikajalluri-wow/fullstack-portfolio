@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const uri =
-  'mongodb+srv://chandrika6300_db_user:wR5Rj0YtjFxbXnKb@cluster0.k2qeqaq.mongodb.net/?appName=Cluster0';
+dotenv.config();
+
+const uri = process.env.MONGO_URI as string;
 
 const bookSchema = new mongoose.Schema({
   title: String,
