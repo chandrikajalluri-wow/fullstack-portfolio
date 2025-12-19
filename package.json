@@ -8,7 +8,16 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write"
+    "format": "prettier --write",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx}": [
+      "eslint"
+    ],
+    "*": [
+      "prettier --write --ignore-unknown"
+    ]
   },
   "repository": {
     "type": "git",
@@ -25,8 +34,15 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
-    "prettier": "^3.6.2"
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.7.3",
+    "typescript-eslint": "^8.48.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }
