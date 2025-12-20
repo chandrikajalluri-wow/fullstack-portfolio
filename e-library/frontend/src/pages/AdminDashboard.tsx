@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { createBook } from '../services/bookService';
 import { createCategory, getCategories } from '../services/categoryService';
-import { getAllBorrows } from '../services/borrowService';
+import { getAllBorrows, acceptReturn } from '../services/borrowService';
 import type { Book, Category, Borrow } from '../types';
 
 const AdminDashboard: React.FC = () => {
@@ -26,6 +26,7 @@ const AdminDashboard: React.FC = () => {
     pdf_url: '',
     genre: '',
     language: '',
+    noOfCopies: '1',
   });
   const [newCategory, setNewCategory] = useState({ name: '', description: '' });
 
@@ -77,6 +78,7 @@ const AdminDashboard: React.FC = () => {
         price: parseFloat(newBook.price) || 0,
         pages: parseInt(newBook.pages) || 0,
         publishedYear: parseInt(newBook.publishedYear) || 0,
+        noOfCopies: parseInt(newBook.noOfCopies) || 1,
       };
       await createBook(payload);
       toast.success('Book created');
@@ -94,10 +96,22 @@ const AdminDashboard: React.FC = () => {
         pdf_url: '',
         genre: '',
         language: '',
+        noOfCopies: '1',
       });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err: unknown) {
       toast.error('Failed to create book');
+    }
+  };
+
+  const handleAcceptReturn = async (borrowId: string) => {
+    try {
+      await acceptReturn(borrowId);
+      toast.success('Return request accepted');
+      fetchBorrows();
+    } catch (err) {
+      console.log(err);
+      toast.error('Failed to accept return');
     }
   };
 
@@ -125,6 +139,9 @@ const AdminDashboard: React.FC = () => {
         <button onClick={() => setActiveTab('books')}>Manage Books</button>
         <button onClick={() => setActiveTab('categories')}>
           Manage Categories
+        </button>
+        <button onClick={() => setActiveTab('requests')}>
+          Return Requests
         </button>
         <button onClick={() => setActiveTab('borrows')}>View Borrows</button>
       </div>
@@ -237,6 +254,15 @@ const AdminDashboard: React.FC = () => {
                   setNewBook({ ...newBook, cover_image_url: e.target.value })
                 }
               />
+              <input
+                type="number"
+                placeholder="Number of Copies"
+                value={newBook.noOfCopies}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, noOfCopies: e.target.value })
+                }
+                required
+              />
 
               <input
                 type="text"
@@ -311,6 +337,63 @@ const AdminDashboard: React.FC = () => {
               <li key={c._id}>{c.name}</li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {activeTab === 'requests' && (
+        <section>
+          <h2>Pending Return Requests</h2>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ textAlign: 'left' }}>
+                <th style={{ padding: '1rem' }}>User</th>
+                <th>Book</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {borrows
+                .filter((b) => b.status === 'return_requested')
+                .map((b) => (
+                  <tr key={b._id} style={{ borderBottom: '1px solid #eee' }}>
+                    <td style={{ padding: '1rem' }}>
+                      {b.user_id?.name || 'Unknown'}
+                    </td>
+                    <td>{b.book_id?.title || 'Unknown'}</td>
+                    <td>
+                      <span
+                        className="status-badge"
+                        style={{ backgroundColor: '#fef3c7', color: '#92400e' }}
+                      >
+                        {b.status}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => handleAcceptReturn(b._id)}
+                        className="btn-primary"
+                        style={{ padding: '0.5rem 1rem' }}
+                      >
+                        Accept Return
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          {borrows.filter((b) => b.status === 'return_requested').length ===
+            0 && (
+            <p
+              style={{
+                textAlign: 'center',
+                padding: '2rem',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              No pending return requests.
+            </p>
+          )}
         </section>
       )}
 

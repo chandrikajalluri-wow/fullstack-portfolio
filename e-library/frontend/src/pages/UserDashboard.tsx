@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 import React, { useEffect, useState } from 'react';
 import { getMyBorrows, returnBook } from '../services/borrowService';
 import { getWishlist, removeFromWishlist } from '../services/wishlistService';
@@ -27,7 +28,7 @@ const UserDashboard: React.FC = () => {
   const handleReturn = async (borrowId: string) => {
     try {
       await returnBook(borrowId);
-      toast.success('Book returned successfully');
+      toast.success('Return requested successfully. Admin will process it.');
       loadData(); // Refresh
     } catch (err) {
       console.error(err);
@@ -41,6 +42,7 @@ const UserDashboard: React.FC = () => {
       toast.success('Removed from wishlist');
       loadData();
     } catch (err) {
+      console.log(err);
       toast.error('Failed to remove from wishlist');
     }
   };
@@ -91,13 +93,23 @@ const UserDashboard: React.FC = () => {
                   </span>
                 </td>
                 <td>
-                  {b.status === 'borrowed' && (
+                  {(b.status === 'borrowed' || b.status === 'overdue') && (
                     <button
                       onClick={() => handleReturn(b._id)}
                       className="btn-secondary"
                     >
-                      Return
+                      Request Return
                     </button>
+                  )}
+                  {b.status === 'return_requested' && (
+                    <span
+                      style={{
+                        color: 'var(--text-secondary)',
+                        fontSize: '0.875rem',
+                      }}
+                    >
+                      Pending Admin Approval
+                    </span>
                   )}
                 </td>
               </tr>

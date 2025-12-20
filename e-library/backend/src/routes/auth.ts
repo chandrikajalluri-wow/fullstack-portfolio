@@ -14,6 +14,27 @@ const router = express.Router();
 router.post('/signup', async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   try {
+    // Basic validations
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    // Password validation: 8 chars, 1 uppercase, 1 special, 1 number
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error:
+          'Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character',
+      });
+    }
+
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ error: 'User already exists' });
 
@@ -34,8 +55,8 @@ router.post('/signup', async (req: Request, res: Response) => {
 
     await user.save();
     res.json({ message: 'Signup successful' });
-  } catch (err: unknown) {
-    console.error(err);
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -58,8 +79,8 @@ router.post('/login', async (req: Request, res: Response) => {
     );
 
     res.json({ token, role: roleDoc.name });
-  } catch (err: unknown) {
-    console.error(err);
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });

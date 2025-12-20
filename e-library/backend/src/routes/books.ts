@@ -23,7 +23,7 @@ router.get('/', async (req: Request, res: Response) => {
     const books = await Book.find(query).populate('category_id', 'name');
     res.json(books);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -38,7 +38,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     if (!book) return res.status(404).json({ error: 'Book not found' });
     res.json(book);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -57,7 +57,7 @@ router.post(
       await book.save();
       res.status(201).json(book);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       res.status(500).json({ error: 'Server error' });
     }
   }
@@ -76,7 +76,7 @@ router.put(
       if (!book) return res.status(404).json({ error: 'Book not found' });
       res.json(book);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       res.status(500).json({ error: 'Server error' });
     }
   }
@@ -93,7 +93,7 @@ router.delete(
       if (!book) return res.status(404).json({ error: 'Book not found' });
       res.json({ message: 'Book deleted' });
     } catch (err) {
-      console.error(err);
+      console.log(err);
       res.status(500).json({ error: 'Server error' });
     }
   }

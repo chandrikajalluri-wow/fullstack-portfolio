@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getBooks } from '../services/bookService';
@@ -151,12 +152,29 @@ const BookList: React.FC = () => {
                   alignItems: 'center',
                 }}
               >
-                <span
-                  className={`status-badge status-${book.status}`}
-                  style={{ fontSize: '0.75rem' }}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.25rem',
+                  }}
                 >
-                  {book.status}
-                </span>
+                  <span
+                    className={`status-badge status-${book.status}`}
+                    style={{ fontSize: '0.75rem' }}
+                  >
+                    {book.status}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    {book.noOfCopies}{' '}
+                    {book.noOfCopies === 1 ? 'copy' : 'copies'} available
+                  </span>
+                </div>
                 <Link
                   to={`/books/${book._id}`}
                   className="btn-primary"

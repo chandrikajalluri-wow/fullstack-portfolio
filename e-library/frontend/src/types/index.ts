@@ -22,6 +22,7 @@ export interface Book {
   genre?: string;
   language?: string;
   rating?: number;
+  noOfCopies: number;
   addedBy?: string; // User ID
   createdAt?: string;
   updatedAt?: string;
@@ -43,4 +44,12 @@ export interface Borrow {
   returned_at?: string;
   status: string; // "borrowed" | "returned" | "overdue"
   fine_amount?: number;
+}
+
+export interface WishlistItem {
+  _id: string;
+  user_id: string;
+  book_id: Book;
+  added_at: string;
+  expectedReturnDate?: string;
 }

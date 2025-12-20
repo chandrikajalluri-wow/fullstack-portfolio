@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import express, { Response } from 'express';
 import Wishlist from '../models/Wishlist';
+import Borrow from '../models/Borrow';
 import { auth, AuthRequest } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -10,9 +12,30 @@ router.get('/', auth, async (req: AuthRequest, res: Response) => {
     const items = await Wishlist.find({ user_id: req.user!._id }).populate(
       'book_id'
     );
-    res.json(items);
+
+    const itemsWithReturnDate = await Promise.all(
+      items.map(async (item: any) => {
+        const book = item.book_id;
+        if (book && book.noOfCopies === 0) {
+          // Find nearest return date
+          const nearestBorrow = await Borrow.findOne({
+            book_id: book._id,
+            status: { $ne: 'returned' },
+          }).sort({ return_date: 1 });
+
+          if (nearestBorrow) {
+            const itemObj = item.toObject();
+            itemObj.expectedReturnDate = nearestBorrow.return_date;
+            return itemObj;
+          }
+        }
+        return item.toObject();
+      })
+    );
+
+    res.json(itemsWithReturnDate);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -31,7 +54,7 @@ router.post('/', auth, async (req: AuthRequest, res: Response) => {
     await item.save();
     res.status(201).json(item);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -42,7 +65,7 @@ router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
     await Wishlist.findByIdAndDelete(req.params.id);
     res.json({ message: 'Removed from wishlist' });
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });

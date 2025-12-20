@@ -14,8 +14,22 @@ const Signup: React.FC = () => {
 
   const handleSignup = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      // 👈 validate name too
       setError('Please fill in all fields');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email format');
+      return;
+    }
+
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError(
+        'Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character'
+      );
       return;
     }
 

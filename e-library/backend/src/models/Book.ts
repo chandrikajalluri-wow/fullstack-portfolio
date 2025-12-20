@@ -20,6 +20,7 @@ export interface IBook extends Document {
   createdAt: Date;
   updatedAt: Date;
   cover_image_url?: string;
+  noOfCopies: number;
 }
 
 const bookSchema = new Schema<IBook>(
@@ -44,6 +45,7 @@ const bookSchema = new Schema<IBook>(
     addedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     updatedAt: { type: Date, default: Date.now },
     cover_image_url: { type: String },
+    noOfCopies: { type: Number, required: true, default: 1 },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import cors from 'cors';
+import { initCronJobs } from './utils/cron';
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ app.use(express.json());
 
 // Connect to MongoDB
 connectDB();
+initCronJobs();
 app.use(cors());
 
 // Routes

@@ -12,8 +12,8 @@ router.post('/issue', auth, async (req: AuthRequest, res: Response) => {
   try {
     const book = await Book.findById(book_id);
     if (!book) return res.status(404).json({ error: 'Book not found' });
-    if (book.status !== 'available')
-      return res.status(400).json({ error: 'Book is not available' });
+    if (book.noOfCopies <= 0)
+      return res.status(400).json({ error: 'No copies available' });
 
     const returnDate = new Date();
     returnDate.setDate(returnDate.getDate() + days);
@@ -25,9 +25,12 @@ router.post('/issue', auth, async (req: AuthRequest, res: Response) => {
     });
     await borrow.save();
 
-    // Update book status
+    // Update book status and inventory
     try {
-      book.status = 'issued';
+      book.noOfCopies -= 1;
+      if (book.noOfCopies === 0) {
+        book.status = 'issued';
+      }
       await book.save();
     } catch (updateError: any) {
       // Compensation: Delete the borrow record if book update fails
@@ -36,7 +39,7 @@ router.post('/issue', auth, async (req: AuthRequest, res: Response) => {
       return res
         .status(500)
         .json({
-          error: 'Failed to update book status: ' + updateError.message,
+          error: 'Failed to update book inventory: ' + updateError.message,
         });
     }
 
@@ -47,36 +50,73 @@ router.post('/issue', auth, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// Request return (User)
 router.post('/return/:id', auth, async (req: AuthRequest, res: Response) => {
   try {
     const borrow = await Borrow.findById(req.params.id);
     if (!borrow) return res.status(404).json({ error: 'Record not found' });
-    if (borrow.status === 'returned')
-      return res.status(400).json({ error: 'Already returned' });
-
-    // Mark returned
-    borrow.returned_at = new Date();
-    borrow.status = 'returned';
-
-    // Calculate fine (simple logic: $1 per day overdue)
-    const now = new Date();
-    if (now > borrow.return_date) {
-      const diffTime = Math.abs(now.getTime() - borrow.return_date.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      borrow.fine_amount = diffDays * 1; // $1 per day
+    if (borrow.status !== 'borrowed' && borrow.status !== 'overdue') {
+      return res
+        .status(400)
+        .json({
+          error: 'Cannot request return for this status: ' + borrow.status,
+        });
     }
 
+    borrow.status = 'return_requested';
     await borrow.save();
-
-    // Update Book status
-    await Book.findByIdAndUpdate(borrow.book_id, { status: 'available' });
 
     res.json(borrow);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+// Accept return (Admin)
+router.post(
+  '/accept-return/:id',
+  auth,
+  checkRole(['admin']),
+  async (req: Request, res: Response) => {
+    try {
+      const borrow = await Borrow.findById(req.params.id);
+      if (!borrow) return res.status(404).json({ error: 'Record not found' });
+      if (borrow.status !== 'return_requested') {
+        return res
+          .status(400)
+          .json({ error: 'No return request found for this record' });
+      }
+
+      // Mark returned
+      borrow.returned_at = new Date();
+      borrow.status = 'returned';
+
+      // Calculate fine (simple logic: $1 per day overdue)
+      const now = new Date();
+      if (now > borrow.return_date) {
+        const diffTime = Math.abs(now.getTime() - borrow.return_date.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        borrow.fine_amount = diffDays * 1; // $1 per day
+      }
+
+      await borrow.save();
+
+      // Update Book status and inventory
+      const book = await Book.findById(borrow.book_id);
+      if (book) {
+        book.noOfCopies += 1;
+        book.status = 'available';
+        await book.save();
+      }
+
+      res.json(borrow);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Server error' });
+    }
+  }
+);
 
 // My Borrows (User)
 router.get('/my', auth, async (req: AuthRequest, res: Response) => {
@@ -86,7 +126,7 @@ router.get('/my', auth, async (req: AuthRequest, res: Response) => {
       .sort({ issued_date: -1 });
     res.json(borrows);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -103,7 +143,7 @@ router.get(
         .populate('book_id', 'title');
       res.json(borrows);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       res.status(500).json({ error: 'Server error' });
     }
   }
